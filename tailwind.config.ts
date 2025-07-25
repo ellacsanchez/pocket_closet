@@ -1,22 +1,22 @@
-import type { Config } from "tailwindcss";
-
+/** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./app/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          "Inter",
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
-          "Apple Color Emoji",
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-          "Noto Color Emoji",
-        ],
+        'sans' : ['Instrument Serif', 'serif'],
       },
+      colors: {
+          'background':'#FEF7F3',
+          'darkgreen':'#145449',
+          'darkred': '#905859',
+          'accent': '#E9DCD3',
+          'greenaccent': '#E7F5DF',
+          'lightbackground': '#FFFBF8',
+      }
     },
   },
   plugins: [],
-} satisfies Config;
+}

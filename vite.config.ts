@@ -1,15 +1,10 @@
-import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
+import { vitePlugin as remix } from "@remix-run/dev"; // ✅ works
 import tsconfigPaths from "vite-tsconfig-paths";
-
-declare module "@remix-run/node" {
-  interface Future {
-    v3_singleFetch: true;
-  }
-}
 
 export default defineConfig({
   plugins: [
+    tsconfigPaths(),
     remix({
       future: {
         v3_fetcherPersist: true,
@@ -19,6 +14,5 @@ export default defineConfig({
         v3_lazyRouteDiscovery: true,
       },
     }),
-    tsconfigPaths(),
   ],
 });
