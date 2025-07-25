@@ -2,6 +2,7 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import db from "~/utils/db.server";
 
+
 export const loader: LoaderFunction = async () => {
   const items = await db.wardrobeItem.findMany({
     orderBy: { createdAt: "desc" },
@@ -46,4 +47,5 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   return json({ success: false, error: "Unsupported method" }, { status: 405 });
+  
 };

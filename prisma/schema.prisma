@@ -14,4 +14,5 @@ model WardrobeItem {
   imageUrl  String
   publicId  String
   createdAt DateTime @default(now())
+  userId    String
 }
