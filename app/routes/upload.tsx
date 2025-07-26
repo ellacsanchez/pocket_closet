@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Upload, ChevronDown, X } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
 import Navigation from '~/components/Navigation';
+import { useUser } from "@clerk/remix";
 
 const WardrobeUpload = () => {
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
@@ -11,6 +12,7 @@ const WardrobeUpload = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const { user } = useUser();
 
   const categories = [
     'tops',
@@ -151,37 +153,52 @@ const WardrobeUpload = () => {
 
   // Save to backend database
   const saveToDatabase = async (clothingItem: any) => {
-    console.log('Saving to database:', clothingItem);
-    
-    try {
-      const formData = new FormData();
-      formData.append('title', clothingItem.title);
-      formData.append('category', clothingItem.category);
-      formData.append('imageUrl', clothingItem.imageUrl);
-      formData.append('publicId', clothingItem.publicId);
+  console.log('Saving to database:', clothingItem);
+  
+  if (!user?.id) {
+    throw new Error('User not authenticated');
+  }
+  
+    // DEBUG: Log the user ID being sent
+  console.log('🔍 UPLOAD - User ID from Clerk:', user.id);
+  console.log('🔍 UPLOAD - User object:', user);
 
-      const response = await fetch('/api/wardrobe', {
-        method: 'POST',
-        body: formData,
-      });
+  try {
+    const formData = new FormData();
+    formData.append('title', clothingItem.title);
+    formData.append('category', clothingItem.category);
+    formData.append('imageUrl', clothingItem.imageUrl);
+    formData.append('publicId', clothingItem.publicId);
+    formData.append('userId', user.id); // Add this line!
 
-      console.log('Database response status:', response.status);
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Database error:', errorData);
-        throw new Error(`Failed to save: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log('Database save successful:', result);
-      return result;
-    } catch (error) {
-      console.error('Error saving to database:', error);
-      throw error;
+  // DEBUG: Log what's being sent
+    console.log('🔍 UPLOAD - FormData being sent:');
+    for (let [key, value] of formData.entries()) {
+      console.log(`  ${key}: ${value}`);
     }
-  };
 
+
+    const response = await fetch('/api/wardrobe', {
+      method: 'POST',
+      body: formData,
+    });
+
+    console.log('Database response status:', response.status);
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Database error:', errorData);
+      throw new Error(`Failed to save: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Database save successful:', result);
+    return result;
+  } catch (error) {
+    console.error('Error saving to database:', error);
+    throw error;
+  }
+};
   const handleSubmit = async () => {
     console.log('=== STARTING UPLOAD PROCESS ===');
     console.log('uploadedImage:', !!uploadedImage);

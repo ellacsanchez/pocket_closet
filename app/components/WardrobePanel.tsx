@@ -1,44 +1,39 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, X } from 'lucide-react';
+import { Search, Filter } from 'lucide-react';
 import type { Filters } from '~/routes/plan';
 
-// Use a more flexible type that matches what actually comes from useLoaderData
-type LoaderWardrobeItem = {
+// Matches data from loader
+export type LoaderWardrobeItem = {
   id: string;
   imageUrl: string;
   category: string;
-  color: string | null;
-  brand: string | null;
-  season: string | null;
-  createdAt: string; // This is a string after JSON serialization
+  title: string;
+  publicId: string;
+  userId: string | null;
+  createdAt: string;
 };
 
 interface WardrobePanelProps {
   items: LoaderWardrobeItem[];
-  filters: Filters;
+  filters: {
+    categories: string[];
+  };
 }
 
 export function WardrobePanel({ items, filters }: WardrobePanelProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedColor, setSelectedColor] = useState<string>('all');
-  const [selectedSeason, setSelectedSeason] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(false);
 
-  // Filter items based on current selections
   const filteredItems = useMemo(() => {
     return items.filter(item => {
       const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-      const matchesColor = selectedColor === 'all' || item.color === selectedColor;
-      const matchesSeason = selectedSeason === 'all' || item.season === selectedSeason;
-      const matchesSearch = searchTerm === '' || 
+      const matchesSearch = searchTerm === '' ||
         item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (item.brand && item.brand.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (item.color && item.color.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      return matchesCategory && matchesColor && matchesSeason && matchesSearch;
+        item.title.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesCategory && matchesSearch;
     });
-  }, [items, selectedCategory, selectedColor, selectedSeason, searchTerm]);
+  }, [items, selectedCategory, searchTerm]);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, item: LoaderWardrobeItem) => {
     e.dataTransfer.setData('application/json', JSON.stringify(item));
@@ -47,18 +42,14 @@ export function WardrobePanel({ items, filters }: WardrobePanelProps) {
 
   const clearFilters = () => {
     setSelectedCategory('all');
-    setSelectedColor('all');
-    setSelectedSeason('all');
     setSearchTerm('');
   };
 
-  const activeFiltersCount = [selectedCategory, selectedColor, selectedSeason].filter(f => f !== 'all').length;
+  const activeFiltersCount = [selectedCategory].filter(f => f !== 'all').length;
 
   return (
     <div className="flex flex-col h-full">
-      {/* Search and Filter Controls */}
       <div className="p-4 border-b border-gray-200 space-y-3">
-        {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <input
@@ -70,7 +61,6 @@ export function WardrobePanel({ items, filters }: WardrobePanelProps) {
           />
         </div>
 
-        {/* Filter Toggle */}
         <div className="flex items-center justify-between">
           <button
             onClick={() => setShowFilters(!showFilters)}
@@ -84,7 +74,7 @@ export function WardrobePanel({ items, filters }: WardrobePanelProps) {
               </span>
             )}
           </button>
-          
+
           {activeFiltersCount > 0 && (
             <button
               onClick={clearFilters}
@@ -95,10 +85,8 @@ export function WardrobePanel({ items, filters }: WardrobePanelProps) {
           )}
         </div>
 
-        {/* Filter Dropdowns */}
         {showFilters && (
           <div className="space-y-2 pt-2 border-t border-gray-200">
-            {/* Category Filter */}
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Category</label>
               <select
@@ -112,50 +100,14 @@ export function WardrobePanel({ items, filters }: WardrobePanelProps) {
                 ))}
               </select>
             </div>
-
-            {/* Color Filter */}
-            {filters.colors.length > 0 && (
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Color</label>
-                <select
-                  value={selectedColor}
-                  onChange={(e) => setSelectedColor(e.target.value)}
-                  className="w-full text-sm border border-gray-300 rounded px-2 py-1"
-                >
-                  <option value="all">All colors</option>
-                  {filters.colors.map(color => (
-                    <option key={color} value={color}>{color}</option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            {/* Season Filter */}
-            {filters.seasons.length > 0 && (
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Season</label>
-                <select
-                  value={selectedSeason}
-                  onChange={(e) => setSelectedSeason(e.target.value)}
-                  className="w-full text-sm border border-gray-300 rounded px-2 py-1"
-                >
-                  <option value="all">All seasons</option>
-                  {filters.seasons.map(season => (
-                    <option key={season} value={season}>{season}</option>
-                  ))}
-                </select>
-              </div>
-            )}
           </div>
         )}
       </div>
 
-      {/* Items Count */}
       <div className="px-4 py-2 text-sm text-gray-600 border-b border-gray-200">
         {filteredItems.length} of {items.length} items
       </div>
 
-      {/* Items Grid */}
       <div className="flex-1 overflow-y-auto p-4">
         <div className="grid grid-cols-2 gap-3">
           {filteredItems.map((item) => (
@@ -179,12 +131,9 @@ export function WardrobePanel({ items, filters }: WardrobePanelProps) {
                 <p className="text-xs font-medium text-gray-900 truncate">
                   {item.category}
                 </p>
-                {item.color && (
-                  <p className="text-xs text-gray-500 truncate">{item.color}</p>
-                )}
-                {item.brand && (
-                  <p className="text-xs text-gray-400 truncate">{item.brand}</p>
-                )}
+                <p className="text-xs text-gray-500 truncate">
+                  {item.title}
+                </p>
               </div>
             </div>
           ))}

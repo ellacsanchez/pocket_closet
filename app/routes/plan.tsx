@@ -5,70 +5,68 @@ import db from "~/utils/db.server";
 import { PlanningCanvas } from "~/components/PlanningCanvas";
 import { WardrobePanel } from "~/components/WardrobePanel";
 import Navigation from "~/components/Navigation";
-import { redirect } from "@remix-run/node";
 
-// Define the filtered preview shape returned from DB
+// Matches what is returned from your DB query
 export type WardrobeItemPreview = {
   id: string;
   imageUrl: string;
   category: string;
-  color: string | null;
-  brand: string | null;
-  season: string | null;
+  title: string;
+  publicId: string;
+  userId: string | null;
   createdAt: Date;
 };
 
-// Define the serialized version that comes from the loader
+// Serialized for the loader
 export type SerializedWardrobeItemPreview = {
   id: string;
   imageUrl: string;
   category: string;
-  color: string | null;
-  brand: string | null;
-  season: string | null;
-  createdAt: string; // This becomes a string after JSON serialization
+  title: string;
+  publicId: string;
+  userId: string | null;
+  createdAt: string;
 };
 
 export type Filters = {
   categories: string[];
-  colors: string[];
-  seasons: string[];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
   try {
-    const { userId } = await getAuth(args); // Pass the full args object to getAuth
+    const { userId } = await getAuth(args);
 
     if (!userId) {
-        return redirect("/sign-in");
+      throw new Response("Unauthorized", { status: 401 });
     }
 
+    // Query items for the current user only
     const wardrobeItems = await db.wardrobeItem.findMany({
       where: { userId },
       select: {
         id: true,
-        imageUrl: true,
+        title: true,
         category: true,
-        color: true,
-        brand: true,
-        season: true,
+        imageUrl: true,
+        publicId: true,
         createdAt: true,
+        userId: true,
       },
       orderBy: { createdAt: "desc" },
     });
 
-    // Manually assert type if needed
-    const itemsTyped = wardrobeItems as SerializedWardrobeItemPreview[];
+    const itemsTyped: SerializedWardrobeItemPreview[] = wardrobeItems.map((item) => ({
+      ...item,
+      createdAt: item.createdAt.toISOString(),
+    }));
 
     const categories = [...new Set(itemsTyped.map((item) => item.category))];
-    const colors = [...new Set(itemsTyped.map((item) => item.color).filter(Boolean))] as string[];
-    const seasons = [...new Set(itemsTyped.map((item) => item.season).filter(Boolean))] as string[];
 
     return json({
       wardrobeItems: itemsTyped,
-      filters: { categories, colors, seasons } satisfies Filters,
+      filters: { categories } satisfies Filters,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in plan loader:", error);
     throw new Response("Internal Server Error", { status: 500 });
   }
@@ -80,6 +78,7 @@ export default function Plan() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
+
       <div className="h-screen flex bg-gray-50">
         {/* Wardrobe Panel - Left Sidebar */}
         <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
@@ -89,7 +88,6 @@ export default function Plan() {
               Drag items to the canvas to create your outfit
             </p>
           </div>
-          {/* Fixed: changed items to wardrobeItems */}
           <WardrobePanel items={wardrobeItems} filters={filters} />
         </div>
 
