@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, RefreshCw, X } from 'lucide-react';
+import { Link } from '@remix-run/react';
 import Navigation from '~/components/Navigation';
 
 interface WardrobeItem {
@@ -56,7 +57,7 @@ const WardrobeGallery = () => {
       } else {
         alert('Failed to delete item');
       }
-    } catch (error) {
+    } catch {
       alert('Failed to delete item');
     }
   };
@@ -102,18 +103,28 @@ const WardrobeGallery = () => {
       <Navigation showBackButton backTo="/directory" backLabel="directory" showQuickNav />
       <div className="min-h-screen bg-background px-10 py-12">
         <div className="max-w-7xl mx-auto">
+          {/* Header with Saved Outfits + Refresh */}
           <div className="flex items-center justify-between mb-10">
-            <h1 className="text-6xl font-light text-darkgreen">my wardrobe</h1>
-            <button
-              onClick={handleRefresh}
-              disabled={refreshing}
-              className="flex items-center gap-2 px-5 py-3 bg-darkgreen text-background rounded-full hover:bg-teal-800 transition-colors"
-            >
-              <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} />
-              refresh
-            </button>
+            <h1 className="text-6xl italic font-light text-darkgreen">my wardrobe</h1>
+            <div className="flex items-center gap-4">
+              <Link
+                to="/outfits"
+                className="flex items-center gap-2 px-5 py-3 bg-accent text-darkred rounded-full hover:bg-lightbackground hover:border-2 hover:border-darkgreen transition-colors"
+              >
+                saved outfits
+              </Link>
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="flex items-center gap-2 px-5 py-3 bg-darkgreen text-background rounded-full hover:bg-teal-800 transition-colors"
+              >
+                <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} />
+                refresh
+              </button>
+            </div>
           </div>
 
+          {/* Category Buttons */}
           <div className="mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 justify-center">
             {categories.map(category => (
               <button
@@ -137,6 +148,7 @@ const WardrobeGallery = () => {
             ))}
           </div>
 
+          {/* Wardrobe Items Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             {filteredItems.map(item => (
               <div
@@ -149,7 +161,6 @@ const WardrobeGallery = () => {
                     src={item.imageUrl}
                     alt={item.title}
                     className="w-full h-64 sm:h-72 md:h-80 object-cover"
-                    onError={(e) => e.currentTarget.src = 'data:image/svg+xml;base64,...'}
                   />
                   <button
                     onClick={(e) => {
@@ -174,9 +185,16 @@ const WardrobeGallery = () => {
         </div>
       </div>
 
+      {/* Modal */}
       {selectedItem && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" onClick={closeModal}>
-          <div className="relative max-w-4xl max-h-[90vh] bg-white rounded-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={closeModal}
+        >
+          <div
+            className="relative max-w-4xl max-h-[90vh] bg-white rounded-2xl overflow-hidden"
+            onClick={e => e.stopPropagation()}
+          >
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all z-10"

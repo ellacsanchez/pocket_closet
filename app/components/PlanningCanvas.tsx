@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Trash2, RotateCw, ZoomIn, ZoomOut, Move, X } from 'lucide-react';
 import type { WardrobeItemPreview } from '~/routes/plan';
 
@@ -13,7 +13,12 @@ interface CanvasItem extends WardrobeItemPreview {
   naturalHeight?: number;
 }
 
-export function PlanningCanvas() {
+export interface PlanningCanvasRef {
+  getCanvasItems: () => CanvasItem[];
+  clearCanvas: () => void;
+}
+
+export const PlanningCanvas = forwardRef<PlanningCanvasRef>((props, ref) => {
   const [canvasItems, setCanvasItems] = useState<CanvasItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
@@ -25,6 +30,15 @@ export function PlanningCanvas() {
   const [dragItemStart, setDragItemStart] = useState({ x: 0, y: 0 });
   const [nextZIndex, setNextZIndex] = useState(1);
   const canvasRef = useRef<HTMLDivElement>(null);
+
+  // Expose methods to parent component
+  useImperativeHandle(ref, () => ({
+    getCanvasItems: () => canvasItems,
+    clearCanvas: () => {
+      setCanvasItems([]);
+      setSelectedItem(null);
+    }
+  }));
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -328,4 +342,4 @@ export function PlanningCanvas() {
       </div>
     </div>
   );
-}
+});
