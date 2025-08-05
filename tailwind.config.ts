@@ -14,6 +14,7 @@ export default {
           'darkred': '#905859',
           'accent': '#E9DCD3',
           'greenaccent': '#E7F5DF',
+          'lightgreen': "#5A8D6D",
           'lightbackground': '#FFFBF8',
       }
     },

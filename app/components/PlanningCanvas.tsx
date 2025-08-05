@@ -16,6 +16,7 @@ interface CanvasItem extends WardrobeItemPreview {
 export interface PlanningCanvasRef {
   getCanvasItems: () => CanvasItem[];
   clearCanvas: () => void;
+  loadCanvasItems: (items: CanvasItem[]) => void; 
 }
 
 export const PlanningCanvas = forwardRef<PlanningCanvasRef>((props, ref) => {
@@ -33,6 +34,12 @@ export const PlanningCanvas = forwardRef<PlanningCanvasRef>((props, ref) => {
 
   // Expose methods to parent component
   useImperativeHandle(ref, () => ({
+    loadCanvasItems: (items: CanvasItem[]) => {
+      setCanvasItems(items);
+      setSelectedItem(null);
+      const maxZIndex = items.reduce((max, item) => Math.max(max, item.zIndex || 0), 0);
+      setNextZIndex(maxZIndex + 1);
+    },
     getCanvasItems: () => canvasItems,
     clearCanvas: () => {
       setCanvasItems([]);

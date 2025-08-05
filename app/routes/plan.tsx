@@ -142,8 +142,8 @@ export default function Plan() {
 
       <div className="h-screen flex bg-gray-50">
         {/* Wardrobe Panel - Left Sidebar */}
-        <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-          <div className="p-4 border-b border-gray-200">
+        <div className="w-80 bg-lightbackground border-r border-gray-200 flex flex-col">
+          <div className="p-4 border-b border-accent">
             <h1 className="text-xl font-semibold text-gray-900">Plan Outfit</h1>
             <p className="text-sm text-gray-600 mt-1">
               Drag items to the canvas to create your outfit
