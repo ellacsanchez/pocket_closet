@@ -1,11 +1,11 @@
-# 👗 Pocket Closet
+# Pocket Closet
 
-Hi! This is my wardrobe app!  
-The app lets users upload and organize clothing items, browse their wardrobe, plan outfits, and pack for trips.
+Hi! This is my wardrobe app ;)
+I created this app to control the rampant amount of clohtes I have, and to have some semblance of organization in my wardrobe. After a user authentification, users can upload and organize clothing items, browse their wardrobe, plan outfits, and pack for trips. See below for more information!
 
 ---
 
-## 🚀 Getting Started
+## Using Pocket Closet
 
 ### 1. Clone the repository
     git clone https://github.com/your-username/pocket_closet.git
