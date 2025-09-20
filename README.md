@@ -1,12 +1,8 @@
-# Pocket Closet
+# Welcome!
 
-A personal wardrobe and outfit planning web app built with **React** and **Remix**. The app allows users to upload, organize, and manage their clothing collection, plan outfits, and prepare for trips with an intuitive drag-and-drop interface.  
+- Hi! This is my wardrobe app :) The app lets users upload and organize clothing items, browse their wardrobe, plan outfits, and pack for trips.
 
-
-## 🚀 Getting Started  
-
-### 1. Clone the repository  
-```bash
+1. Clone the repository
 git clone https://github.com/your-username/wardrobe-app.git
 cd wardrobe-app
 
@@ -29,23 +25,12 @@ npx prisma migrate dev
 npm run dev
 
 
-The app will be live at: http://localhost:5173
+The app will be live at: http://localhost:3000
 
 📂 Project Structure
 /app
-  /components       
-  /routes           
-  /utils           
-prisma/schema.prisma  
-public/              
-
-
-
-### 🛠️ Tech Stack  
-
-- **Frontend:** React, Remix, TypeScript, TailwindCSS  
-- **Backend:** Remix loaders/actions, Prisma ORM  
-- **Database:** SQLite / PostgreSQL (configurable)  
-- **Storage:** Cloudinary (for images)  
-
----
+  /components       # React components (forms, inputs, gallery, planner)
+  /routes           # Remix routes (wardrobe, upload, pack, plan, outfits)
+  /utils            # Helper functions (Cloudinary, Prisma client)
+prisma/schema.prisma  # Database schema
+public/              # Static assets
