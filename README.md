@@ -1,7 +1,7 @@
 # Pocket Closet
 
 Hi! This is my wardrobe app ;)
-I created this app to control the rampant amount of clohtes I have, and to have some semblance of organization in my wardrobe. After a user authentification, users can upload and organize clothing items, browse their wardrobe, plan outfits, and pack for trips. See below for more information!
+I created this app to control the rampant amount of clothes I have, and to have some semblance of organization in my wardrobe 😊. After a user authentification, users can upload and organize clothing items, browse their wardrobe, plan outfits, and pack for trips. See below for more information!
 
 ---
 
