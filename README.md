@@ -1,40 +1,36 @@
-# Welcome to Remix!
+# Welcome!
 
-- 📖 [Remix docs](https://remix.run/docs)
+- Hi! This is my wardrobe app :) The app lets users upload and organize clothing items, browse their wardrobe, plan outfits, and pack for trips.
 
-## Development
+1. Clone the repository
+git clone https://github.com/your-username/wardrobe-app.git
+cd wardrobe-app
 
-Run the dev server:
+2. Install dependencies
+npm install
 
-```sh
+3. Set up environment variables
+
+Create a .env file in the project root with:
+
+DATABASE_URL="file:./dev.db"   # or your Postgres URL
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+4. Run database migrations
+npx prisma migrate dev
+
+5. Start the development server
 npm run dev
-```
 
-## Deployment
 
-First, build your app for production:
+The app will be live at: http://localhost:3000
 
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+📂 Project Structure
+/app
+  /components       # React components (forms, inputs, gallery, planner)
+  /routes           # Remix routes (wardrobe, upload, pack, plan, outfits)
+  /utils            # Helper functions (Cloudinary, Prisma client)
+prisma/schema.prisma  # Database schema
+public/              # Static assets
