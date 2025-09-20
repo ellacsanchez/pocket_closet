@@ -31,7 +31,7 @@ The app will be live at: [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 📂 Project Structure
+## Project Structure
     /app
       /components       
       /routes           
@@ -41,7 +41,7 @@ The app will be live at: [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Frontend:** React, Remix, TypeScript, TailwindCSS  
 - **Backend:** Remix loaders/actions, Prisma ORM  
 - **Database:** SQLite / PostgreSQL (configurable)  
