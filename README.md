@@ -1,40 +1,51 @@
-# Welcome to Remix!
+# Pocket Closet
 
-- 📖 [Remix docs](https://remix.run/docs)
+A personal wardrobe and outfit planning web app built with **React** and **Remix**. The app allows users to upload, organize, and manage their clothing collection, plan outfits, and prepare for trips with an intuitive drag-and-drop interface.  
 
-## Development
 
-Run the dev server:
+## 🚀 Getting Started  
 
-```sh
+### 1. Clone the repository  
+```bash
+git clone https://github.com/your-username/wardrobe-app.git
+cd wardrobe-app
+
+2. Install dependencies
+npm install
+
+3. Set up environment variables
+
+Create a .env file in the project root with:
+
+DATABASE_URL="file:./dev.db"   # or your Postgres URL
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+4. Run database migrations
+npx prisma migrate dev
+
+5. Start the development server
 npm run dev
-```
 
-## Deployment
 
-First, build your app for production:
+The app will be live at: http://localhost:5173
 
-```sh
-npm run build
-```
+📂 Project Structure
+/app
+  /components       
+  /routes           
+  /utils           
+prisma/schema.prisma  
+public/              
 
-Then run the app in production mode:
 
-```sh
-npm start
-```
 
-Now you'll need to pick a host to deploy it to.
+### 🛠️ Tech Stack  
 
-### DIY
+- **Frontend:** React, Remix, TypeScript, TailwindCSS  
+- **Backend:** Remix loaders/actions, Prisma ORM  
+- **Database:** SQLite / PostgreSQL (configurable)  
+- **Storage:** Cloudinary (for images)  
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+---
